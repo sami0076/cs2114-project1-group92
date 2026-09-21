@@ -1,5 +1,4 @@
 import student.TestCase;
-
 import java.time.LocalDate;
 
 /**
@@ -47,7 +46,7 @@ public class TaskTest
     /**
      * test setName() - valid input
      * 
-     * @throws TaskException
+     * @throws TaskException when input is invalid
      */
 
     public void testSetName()
