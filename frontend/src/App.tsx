@@ -6,7 +6,7 @@ import Row from 'react-bootstrap/Row'
 import './App.css'
 import { completeTask, createTask, deleteTask, getStats, getTasks, updateTask } from './api'
 import ErrorAlert from './components/ErrorAlert'
-import StatsPanel from './components/StatsPanel'
+import StatsCards from './components/StatsCards'
 import TaskForm from './components/TaskForm'
 import TaskItem from './components/TaskItem'
 import type { Stats, Task, TaskInput } from './types'
@@ -125,7 +125,7 @@ function App() {
           </Col>
 
           <Col md={8}>
-            {stats && <StatsPanel stats={stats} />}
+            {stats && <StatsCards stats={stats} />}
 
             {loading && <p>Loading...</p>}
 
