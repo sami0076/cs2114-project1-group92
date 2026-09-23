@@ -130,21 +130,6 @@
   flex: 1;
 }
 
-.task-form button {
-  align-self: flex-start;
-  padding: 0.4375rem 1rem;
-  border: 1px solid #d8dee4;
-  border-radius: 6px;
-  background-color: #f6f8fa;
-  font: inherit;
-  cursor: pointer;
-}
-
-.task-form button:disabled {
-  cursor: default;
-  opacity: 0.6;
-}
-
 .task-actions {
   display: flex;
   gap: 0.5rem;
@@ -168,4 +153,23 @@
 
 .task-actions .danger {
   color: #b3261e;
+}
+
+.task-form-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.task-form-actions button {
+  padding: 0.4375rem 1rem;
+  border: 1px solid #d8dee4;
+  border-radius: 6px;
+  background-color: #f6f8fa;
+  font: inherit;
+  cursor: pointer;
+}
+
+.task-form-actions button:disabled {
+  cursor: default;
+  opacity: 0.6;
 }
