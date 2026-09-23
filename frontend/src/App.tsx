@@ -1,9 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
+import Col from 'react-bootstrap/Col'
+import Container from 'react-bootstrap/Container'
+import Navbar from 'react-bootstrap/Navbar'
+import Row from 'react-bootstrap/Row'
 import './App.css'
 import { completeTask, createTask, deleteTask, getStats, getTasks, updateTask } from './api'
-import StatsPanel from './StatsPanel'
-import TaskForm from './TaskForm'
-import TaskItem from './TaskItem'
+import ErrorAlert from './components/ErrorAlert'
+import StatsPanel from './components/StatsPanel'
+import TaskForm from './components/TaskForm'
+import TaskItem from './components/TaskItem'
 import type { Stats, Task, TaskInput } from './types'
 
 function App() {
@@ -86,58 +91,70 @@ function App() {
   const editing = editingIndex === null ? undefined : tasks[editingIndex]
 
   return (
-    <main className="app">
-      <h1>TaskEasy</h1>
+    <>
+      <Navbar bg="dark" data-bs-theme="dark" className="mb-4">
+        <Container>
+          <Navbar.Brand>TaskEasy</Navbar.Brand>
+        </Container>
+      </Navbar>
 
-      {stats && <StatsPanel stats={stats} />}
+      <Container>
+        <ErrorAlert message={error} onDismiss={() => setError('')} />
 
-      {editing ? (
-        <TaskForm
-          key={'edit-' + editingIndex}
-          initial={{
-            name: editing.name,
-            description: editing.description,
-            deadline: editing.deadline,
-            priority: editing.priority
-          }}
-          submitLabel="Save changes"
-          onSubmit={handleUpdate}
-          onCancel={() => {
-            setEditingIndex(null)
-            setError('')
-          }}
-        />
-      ) : (
-        <TaskForm key="new" submitLabel="Add task" onSubmit={handleCreate} />
-      )}
+        <Row>
+          <Col md={4} className="mb-3">
+            {editing ? (
+              <TaskForm
+                key={'edit-' + editingIndex}
+                initial={{
+                  name: editing.name,
+                  description: editing.description,
+                  deadline: editing.deadline,
+                  priority: editing.priority
+                }}
+                submitLabel="Save changes"
+                onSubmit={handleUpdate}
+                onCancel={() => {
+                  setEditingIndex(null)
+                  setError('')
+                }}
+              />
+            ) : (
+              <TaskForm key="new" submitLabel="Add task" onSubmit={handleCreate} />
+            )}
+          </Col>
 
-      {error !== '' && <p className="error">{error}</p>}
+          <Col md={8}>
+            {stats && <StatsPanel stats={stats} />}
 
-      {loading && <p>Loading...</p>}
+            {loading && <p>Loading...</p>}
 
-      {!loading && tasks.length > 0 && (
-        <ul className="task-list">
-          {tasks.map((task, index) => (
-            <TaskItem
-              key={task.name}
-              task={task}
-              index={index}
-              busy={busy}
-              onEdit={(i) => {
-                setEditingIndex(i)
-                setError('')
-              }}
-              onComplete={(i) => run(() => completeTask(i))}
-              onDelete={(i) => run(() => deleteTask(i))}
-            />
-          ))}
-        </ul>
-      )}
+            {!loading && tasks.length > 0 && (
+              <ul className="task-list">
+                {tasks.map((task, index) => (
+                  <TaskItem
+                    key={task.name}
+                    task={task}
+                    index={index}
+                    busy={busy}
+                    onEdit={(i) => {
+                      setEditingIndex(i)
+                      setError('')
+                    }}
+                    onComplete={(i) => run(() => completeTask(i))}
+                    onDelete={(i) => run(() => deleteTask(i))}
+                  />
+                ))}
+              </ul>
+            )}
 
-      {!loading && tasks.length === 0 && error === '' && (
-        <p className="empty">No tasks yet.</p>
-      )}
-    </main>
+            {!loading && tasks.length === 0 && error === '' && (
+              <p className="empty">No tasks yet.</p>
+            )}
+          </Col>
+        </Row>
+      </Container>
+    </>
   )
 }
 

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
-import type { Priority, TaskInput } from './types'
+import type { Priority, TaskInput } from '../types'
 
 const PRIORITIES: Priority[] = ['LOW', 'MEDIUM', 'HIGH']
 
