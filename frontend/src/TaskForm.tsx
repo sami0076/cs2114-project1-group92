@@ -6,29 +6,33 @@ const PRIORITIES: Priority[] = ['LOW', 'MEDIUM', 'HIGH']
 
 type Props = {
   onSubmit: (input: TaskInput) => Promise<boolean>
+  submitLabel: string
+  initial?: TaskInput
+  onCancel?: () => void
 }
 
-function TaskForm({ onSubmit }: Props) {
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
-  const [deadline, setDeadline] = useState('')
-  const [priority, setPriority] = useState<Priority>('MEDIUM')
+function TaskForm({ onSubmit, submitLabel, initial, onCancel }: Props) {
+  const [name, setName] = useState(initial ? initial.name : '')
+  const [description, setDescription] = useState(initial ? initial.description : '')
+  const [deadline, setDeadline] = useState(initial ? initial.deadline : '')
+  const [priority, setPriority] = useState<Priority>(initial ? initial.priority : 'MEDIUM')
   const [submitting, setSubmitting] = useState(false)
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault()
     setSubmitting(true)
-    const created = await onSubmit({ name, description, deadline, priority })
+    const saved = await onSubmit({ name, description, deadline, priority })
     setSubmitting(false)
 
-    if (created) {
+    // Only the create form empties itself. When editing, App closes the form
+    // on success, and on failure the values stay so they can be corrected.
+    if (saved && !initial) {
       setName('')
       setDescription('')
       setDeadline('')
       setPriority('MEDIUM')
     }
   }
-
 
   return (
     <form className="task-form" onSubmit={handleSubmit}>
@@ -69,9 +73,17 @@ function TaskForm({ onSubmit }: Props) {
         </label>
       </div>
 
-      <button type="submit" disabled={submitting}>
-        {submitting ? 'Adding...' : 'Add task'}
-      </button>
+      <div className="task-form-actions">
+        <button type="submit" disabled={submitting}>
+          {submitting ? 'Saving...' : submitLabel}
+        </button>
+
+        {onCancel && (
+          <button type="button" onClick={onCancel} disabled={submitting}>
+            Cancel
+          </button>
+        )}
+      </div>
     </form>
   )
 }
