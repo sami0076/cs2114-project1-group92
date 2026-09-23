@@ -3,7 +3,6 @@ import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/Container'
 import Navbar from 'react-bootstrap/Navbar'
 import Row from 'react-bootstrap/Row'
-import './App.css'
 import { completeTask, createTask, deleteTask, getStats, getTasks, updateTask } from './api'
 import ErrorAlert from './components/ErrorAlert'
 import StatsCards from './components/StatsCards'
@@ -112,6 +111,7 @@ function App() {
                   deadline: editing.deadline,
                   priority: editing.priority
                 }}
+                title={'Edit task #' + editingIndex}
                 submitLabel="Save changes"
                 onSubmit={handleUpdate}
                 onCancel={() => {
@@ -120,7 +120,12 @@ function App() {
                 }}
               />
             ) : (
-              <TaskForm key="new" submitLabel="Add task" onSubmit={handleCreate} />
+              <TaskForm
+                key="new"
+                title="New task"
+                submitLabel="Add task"
+                onSubmit={handleCreate}
+              />
             )}
           </Col>
 

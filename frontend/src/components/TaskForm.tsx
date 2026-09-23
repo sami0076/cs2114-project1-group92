@@ -1,17 +1,23 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
+import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
+import Col from 'react-bootstrap/Col'
+import Form from 'react-bootstrap/Form'
+import Row from 'react-bootstrap/Row'
 import type { Priority, TaskInput } from '../types'
 
 const PRIORITIES: Priority[] = ['LOW', 'MEDIUM', 'HIGH']
 
 type Props = {
   onSubmit: (input: TaskInput) => Promise<boolean>
+  title: string
   submitLabel: string
   initial?: TaskInput
   onCancel?: () => void
 }
 
-function TaskForm({ onSubmit, submitLabel, initial, onCancel }: Props) {
+function TaskForm({ onSubmit, title, submitLabel, initial, onCancel }: Props) {
   const [name, setName] = useState(initial ? initial.name : '')
   const [description, setDescription] = useState(initial ? initial.description : '')
   const [deadline, setDeadline] = useState(initial ? initial.deadline : '')
@@ -34,57 +40,83 @@ function TaskForm({ onSubmit, submitLabel, initial, onCancel }: Props) {
     }
   }
 
+
   return (
-    <form className="task-form" onSubmit={handleSubmit}>
-      <label>
-        Name
-        <input value={name} onChange={(e) => setName(e.target.value)} />
-      </label>
+    <Card>
+      <Card.Header>{title}</Card.Header>
 
-      <label>
-        Description
-        <textarea
-          rows={2}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-      </label>
+      <Card.Body>
+        <Form onSubmit={handleSubmit}>
+          <Form.Group className="mb-3" controlId="taskName">
+            <Form.Label>Name</Form.Label>
+            <Form.Control
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <Form.Text className="text-muted">
+              {name.length}/50 characters
+            </Form.Text>
+          </Form.Group>
 
-      <div className="task-form-row">
-        <label>
-          Deadline
-          <input
-            type="date"
-            value={deadline}
-            onChange={(e) => setDeadline(e.target.value)}
-          />
-        </label>
+          <Form.Group className="mb-3" controlId="taskDescription">
+            <Form.Label>Description</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={3}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            <Form.Text className="text-muted">
+              {description.length}/200 characters
+            </Form.Text>
+          </Form.Group>
 
-        <label>
-          Priority
-          <select
-            value={priority}
-            onChange={(e) => setPriority(e.target.value as Priority)}
-          >
-            {PRIORITIES.map((p) => (
-              <option key={p} value={p}>{p}</option>
-            ))}
-          </select>
-        </label>
-      </div>
+          <Row className="mb-3">
+            <Col>
+              <Form.Group controlId="taskDeadline">
+                <Form.Label>Deadline</Form.Label>
+                <Form.Control
+                  type="date"
+                  value={deadline}
+                  onChange={(e) => setDeadline(e.target.value)}
+                />
+              </Form.Group>
+            </Col>
 
-      <div className="task-form-actions">
-        <button type="submit" disabled={submitting}>
-          {submitting ? 'Saving...' : submitLabel}
-        </button>
+            <Col>
+              <Form.Group controlId="taskPriority">
+                <Form.Label>Priority</Form.Label>
+                <Form.Select
+                  value={priority}
+                  onChange={(e) => setPriority(e.target.value as Priority)}
+                >
+                  {PRIORITIES.map((p) => (
+                    <option key={p} value={p}>{p}</option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+            </Col>
+          </Row>
 
-        {onCancel && (
-          <button type="button" onClick={onCancel} disabled={submitting}>
-            Cancel
-          </button>
-        )}
-      </div>
-    </form>
+          <div className="d-flex gap-2">
+            <Button type="submit" variant="primary" disabled={submitting}>
+              {submitting ? 'Saving...' : submitLabel}
+            </Button>
+
+            {onCancel && (
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={onCancel}
+                disabled={submitting}
+              >
+                Cancel
+              </Button>
+            )}
+          </div>
+        </Form>
+      </Card.Body>
+    </Card>
   )
 }
 
