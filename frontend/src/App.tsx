@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
 import './App.css'
-import { completeTask, createTask, deleteTask, getTasks, updateTask } from './api'
+import { completeTask, createTask, deleteTask, getStats, getTasks, updateTask } from './api'
+import StatsPanel from './StatsPanel'
 import TaskForm from './TaskForm'
 import TaskItem from './TaskItem'
-import type { Task, TaskInput } from './types'
+import type { Stats, Task, TaskInput } from './types'
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([])
+  const [stats, setStats] = useState<Stats | null>(null)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState(false)
@@ -14,9 +16,14 @@ function App() {
 
   // Tasks are identified by their position in the list, and those positions
   // shift on the backend, so always reload rather than editing tasks locally.
+  // Every change to a task changes the statistics too, so both are reloaded
+  // together and a failure in either one is reported the same way.
   const refresh = useCallback(() => {
-    return getTasks()
-      .then(setTasks)
+    return Promise.all([getTasks(), getStats()])
+      .then(([loadedTasks, loadedStats]) => {
+        setTasks(loadedTasks)
+        setStats(loadedStats)
+      })
       .catch((e: Error) => setError(e.message))
   }, [])
 
@@ -81,6 +88,8 @@ function App() {
   return (
     <main className="app">
       <h1>TaskEasy</h1>
+
+      {stats && <StatsPanel stats={stats} />}
 
       {editing ? (
         <TaskForm
