@@ -8,7 +8,7 @@ import { completeTask, createTask, deleteTask, getStats, getTasks, updateTask } 
 import ErrorAlert from './components/ErrorAlert'
 import StatsCards from './components/StatsCards'
 import TaskForm from './components/TaskForm'
-import TaskItem from './components/TaskItem'
+import TaskTable from './components/TaskTable'
 import type { Stats, Task, TaskInput } from './types'
 
 function App() {
@@ -127,29 +127,21 @@ function App() {
           <Col md={8}>
             {stats && <StatsCards stats={stats} />}
 
-            {loading && <p>Loading...</p>}
+            {loading && <p className="text-muted">Loading...</p>}
 
-            {!loading && tasks.length > 0 && (
-              <ul className="task-list">
-                {tasks.map((task, index) => (
-                  <TaskItem
-                    key={task.name}
-                    task={task}
-                    index={index}
-                    busy={busy}
-                    onEdit={(i) => {
-                      setEditingIndex(i)
-                      setError('')
-                    }}
-                    onComplete={(i) => run(() => completeTask(i))}
-                    onDelete={(i) => run(() => deleteTask(i))}
-                  />
-                ))}
-              </ul>
-            )}
-
-            {!loading && tasks.length === 0 && error === '' && (
-              <p className="empty">No tasks yet.</p>
+            {/* With no tasks and an error showing, the alert says what happened;
+                the table would otherwise claim the list is simply empty. */}
+            {!loading && (tasks.length > 0 || error === '') && (
+              <TaskTable
+                tasks={tasks}
+                busy={busy}
+                onEdit={(i) => {
+                  setEditingIndex(i)
+                  setError('')
+                }}
+                onComplete={(i) => run(() => completeTask(i))}
+                onDelete={(i) => run(() => deleteTask(i))}
+              />
             )}
           </Col>
         </Row>
