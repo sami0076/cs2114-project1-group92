@@ -1,9 +1,5 @@
-import type { Task } from './types'
-
-export function isOverdue(task: Task): boolean {
-  const today = new Date().toISOString().slice(0, 10)
-  return !task.completed && task.deadline < today
-}
+import { isOverdue } from '../overdue'
+import type { Task } from '../types'
 
 type Props = {
   task: Task
