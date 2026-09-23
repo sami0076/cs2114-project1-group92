@@ -1,8 +1,11 @@
+import { useState } from 'react'
 import Badge from 'react-bootstrap/Badge'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
+import Form from 'react-bootstrap/Form'
 import Table from 'react-bootstrap/Table'
 import { isOverdue } from '../overdue'
+import { matchTasks } from '../search'
 import type { Task } from '../types'
 
 type Props = {
@@ -34,6 +37,9 @@ function statusBadge(task: Task) {
 }
 
 function TaskTable({ tasks, busy, onEdit, onComplete, onDelete }: Props) {
+  const [search, setSearch] = useState('')
+  const rows = matchTasks(tasks, search)
+
   function askThenDelete(index: number) {
     if (window.confirm('Delete this task?')) {
       onDelete(index)
@@ -42,12 +48,36 @@ function TaskTable({ tasks, busy, onEdit, onComplete, onDelete }: Props) {
 
   return (
     <Card>
-      <Card.Header>Tasks</Card.Header>
+      <Card.Header className="d-flex justify-content-between align-items-center">
+        <span>Tasks</span>
+        {tasks.length > 0 && (
+          <small className="text-muted">
+            Showing {rows.length} of {tasks.length}
+          </small>
+        )}
+      </Card.Header>
 
       <Card.Body className="p-0">
-        {tasks.length === 0 ? (
+        {tasks.length > 0 && (
+          <div className="p-3 border-bottom">
+            <Form.Control
+              type="search"
+              placeholder="Search by name or description"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+        )}
+
+        {tasks.length === 0 && (
           <p className="text-muted m-3">No tasks yet. Add one with the form.</p>
-        ) : (
+        )}
+
+        {tasks.length > 0 && rows.length === 0 && (
+          <p className="text-muted m-3">No tasks match your search.</p>
+        )}
+
+        {rows.length > 0 && (
           <Table striped hover responsive className="align-middle mb-0">
             <thead>
               <tr>
@@ -61,7 +91,7 @@ function TaskTable({ tasks, busy, onEdit, onComplete, onDelete }: Props) {
             </thead>
 
             <tbody>
-              {tasks.map((task, index) => (
+              {rows.map(({ task, index }) => (
                 <tr key={task.name}>
                   <td>{index}</td>
 
