@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import './App.css'
-import { createTask, getTasks } from './api'
+import { completeTask, createTask, deleteTask, getTasks } from './api'
 import TaskForm from './TaskForm'
 import TaskItem from './TaskItem'
 import type { Task, TaskInput } from './types'
@@ -9,6 +9,7 @@ function App() {
   const [tasks, setTasks] = useState<Task[]>([])
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
+  const [busy, setBusy] = useState(false)
 
   // Tasks are identified by their position in the list, and those positions
   // shift on the backend, so always reload rather than editing tasks locally.
@@ -21,6 +22,24 @@ function App() {
   useEffect(() => {
     refresh().finally(() => setLoading(false))
   }, [refresh])
+
+  // Deleting a task shifts every later task down one position, so no second
+  // request may go out on the old positions until the list has reloaded.
+  async function run(action: () => Promise<unknown>) {
+    setError('')
+    setBusy(true)
+
+    try {
+      await action()
+      await refresh()
+    }
+    catch (e) {
+      setError((e as Error).message)
+    }
+    finally {
+      setBusy(false)
+    }
+  }
 
   async function handleCreate(input: TaskInput): Promise<boolean> {
     setError('')
@@ -48,8 +67,15 @@ function App() {
 
       {!loading && tasks.length > 0 && (
         <ul className="task-list">
-          {tasks.map((task) => (
-            <TaskItem key={task.name} task={task} />
+          {tasks.map((task, index) => (
+            <TaskItem
+              key={task.name}
+              task={task}
+              index={index}
+              busy={busy}
+              onComplete={(i) => run(() => completeTask(i))}
+              onDelete={(i) => run(() => deleteTask(i))}
+            />
           ))}
         </ul>
       )}

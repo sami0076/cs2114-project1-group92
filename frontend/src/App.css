@@ -144,3 +144,28 @@
   cursor: default;
   opacity: 0.6;
 }
+
+.task-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.625rem;
+}
+
+.task-actions button {
+  padding: 0.25rem 0.625rem;
+  border: 1px solid #d8dee4;
+  border-radius: 4px;
+  background-color: #f6f8fa;
+  font: inherit;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.task-actions button:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.task-actions .danger {
+  color: #b3261e;
+}

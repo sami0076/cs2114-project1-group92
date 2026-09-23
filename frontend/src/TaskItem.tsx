@@ -7,9 +7,13 @@ export function isOverdue(task: Task): boolean {
 
 type Props = {
   task: Task
+  index: number
+  busy: boolean
+  onComplete: (index: number) => void
+  onDelete: (index: number) => void
 }
 
-function TaskItem({ task }: Props) {
+function TaskItem({ task, index, busy, onComplete, onDelete }: Props) {
   return (
     <li className={task.completed ? 'task completed' : 'task'}>
       <div className="task-head">
@@ -24,6 +28,22 @@ function TaskItem({ task }: Props) {
         {isOverdue(task) && <span className="overdue"> - Overdue</span>}
         {task.completed && <span> - Completed</span>}
       </p>
+
+      <div className="task-actions">
+        {!task.completed && (
+          <button type="button" disabled={busy} onClick={() => onComplete(index)}>
+            Complete
+          </button>
+        )}
+        <button
+          type="button"
+          className="danger"
+          disabled={busy}
+          onClick={() => onDelete(index)}
+        >
+          Delete
+        </button>
+      </div>
     </li>
   )
 }
