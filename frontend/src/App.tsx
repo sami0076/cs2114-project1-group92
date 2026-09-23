@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import { getTasks } from './api'
+import TaskItem from './TaskItem'
 import type { Task } from './types'
 
 function App() {
@@ -8,13 +9,14 @@ function App() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
 
-  // Load the tasks once, when the page opens.
   useEffect(() => {
     getTasks()
       .then(setTasks)
       .catch((e: Error) => setError(e.message))
       .finally(() => setLoading(false))
   }, [])
+
+  const showTasks = !loading && error === ''
 
   return (
     <main className="app">
@@ -23,7 +25,16 @@ function App() {
       {error !== '' && <p className="error">{error}</p>}
 
       {loading && <p>Loading...</p>}
-      {!loading && error === '' && <p>{tasks.length} tasks loaded.</p>}
+
+      {showTasks && tasks.length === 0 && <p className="empty">No tasks yet.</p>}
+
+      {showTasks && tasks.length > 0 && (
+        <ul className="task-list">
+          {tasks.map((task) => (
+            <TaskItem key={task.name} task={task} />
+          ))}
+        </ul>
+      )}
     </main>
   )
 }

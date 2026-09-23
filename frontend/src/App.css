@@ -16,3 +16,74 @@
   background-color: #fdeaea;
   color: #8c1c1c;
 }
+
+.empty {
+  color: #6a737d;
+}
+
+.task-list {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.task {
+  padding: 0.75rem 1rem;
+  border: 1px solid #d8dee4;
+  border-radius: 6px;
+  background-color: #fff;
+}
+
+.task-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.task-name {
+  font-weight: 600;
+}
+
+.task.completed .task-name {
+  text-decoration: line-through;
+  color: #6a737d;
+}
+
+.priority {
+  font-size: 0.75rem;
+  padding: 0.125rem 0.5rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+}
+
+.priority-LOW {
+  color: #57606a;
+}
+
+.priority-MEDIUM {
+  color: #9a6700;
+}
+
+.priority-HIGH {
+  color: #b3261e;
+}
+
+.task-description {
+  margin: 0.375rem 0;
+  color: #3b4045;
+}
+
+.task-meta {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: #6a737d;
+}
+
+.overdue {
+  color: #b3261e;
+  font-weight: 600;
+}
