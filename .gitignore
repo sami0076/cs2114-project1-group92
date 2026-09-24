@@ -32,3 +32,4 @@ backend/tasks.json
 # IDE
 .idea/
 *.iml
+.env
