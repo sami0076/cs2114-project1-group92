@@ -2,6 +2,10 @@
 
 Task manager for CS2114 Project 1, group 92. A Java Spring Boot backend stores tasks in `backend/tasks.json` and a Vite/React/TypeScript frontend displays them.
 
+## System diagram
+
+![TaskEasy system diagram](TaskEasy_System_Diagram.png)
+
 ## Running
 
 Backend (port 8080):
