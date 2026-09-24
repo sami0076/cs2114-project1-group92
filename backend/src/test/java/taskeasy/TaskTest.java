@@ -1,3 +1,5 @@
+package taskeasy;
+
 import student.TestCase;
 import java.time.LocalDate;
 

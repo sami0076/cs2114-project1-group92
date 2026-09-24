@@ -1,4 +1,6 @@
-public class TaskException extends Exception {
+package taskeasy;
+
+public class TaskException extends RuntimeException {
     
     public TaskException(String message)
     {

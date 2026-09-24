@@ -1,3 +1,5 @@
+package taskeasy;
+
 /**
  * Calculates read-only statistics about a TaskList.
  *
