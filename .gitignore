@@ -24,3 +24,11 @@ hs_err_pid*
 replay_pid*
 .classpath
 .project
+
+# Backend build output and save file
+backend/target/
+backend/tasks.json
+
+# IDE
+.idea/
+*.iml

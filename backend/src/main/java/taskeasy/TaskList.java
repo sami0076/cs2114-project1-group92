@@ -1,4 +1,8 @@
+package taskeasy;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.time.LocalDate;
 
 // -------------------------------------------------------------------------
@@ -79,6 +83,11 @@ public class TaskList
     public int size()
     {
         return tasks.size();
+    }
+
+    public List<Task> getAllTasks()
+    {
+        return Collections.unmodifiableList(tasks);
     }
 
     // ----------------------------------------------------------
