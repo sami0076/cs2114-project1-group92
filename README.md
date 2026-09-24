@@ -4,7 +4,7 @@ Task manager for CS2114 Project 1, group 92. A Java Spring Boot backend stores t
 
 ## System diagram
 
-![TaskEasy system diagram](TaskEasy_System_Diagram.png)
+<img src="TaskEasy_System_Diagram.png" alt="TaskEasy system diagram" width="400">
 
 ## Running
 
