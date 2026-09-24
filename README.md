@@ -23,6 +23,24 @@ Open http://localhost:5173. The Vite dev server forwards `/api/...` to `http://l
 
 Maven is downloaded automatically by `./mvnw` the first time. Java 17 or newer is required.
 
+## Docker
+
+```
+docker compose up -d --build
+```
+
+This builds two images. The backend image compiles the jar with Maven and runs it with Java 17, keeping the save file in the `taskeasy-data` volume at `/data/tasks.json`. The frontend image builds the React app and serves the static files with nginx.
+
+Both containers publish a port on the address in `BIND_IP`, which defaults to `127.0.0.1`. To reach them from a reverse proxy on another machine, put the address it should listen on in a `.env` file next to `docker-compose.yml`, for example the server's WireGuard address:
+
+```
+BIND_IP=10.8.0.2
+FRONTEND_PORT=8090
+BACKEND_PORT=8080
+```
+
+The reverse proxy serves the site from the frontend port and forwards `/api/...` to the backend port with the `/api` prefix removed, so `/api/tasks` reaches the backend as `/tasks`.
+
 ## Tests
 
 ```
