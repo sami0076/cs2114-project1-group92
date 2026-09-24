@@ -4,14 +4,22 @@ services:
     restart: unless-stopped
     volumes:
       - taskeasy-data:/data
-    ports:
-      - "${BIND_IP:-127.0.0.1}:${BACKEND_PORT:-8080}:8080"
+    networks:
+      - taskeasy
 
   frontend:
     build: ./frontend
     restart: unless-stopped
+    depends_on:
+      - backend
     ports:
       - "${BIND_IP:-127.0.0.1}:${FRONTEND_PORT:-8090}:80"
+    networks:
+      - taskeasy
 
 volumes:
   taskeasy-data:
+
+networks:
+  taskeasy:
+    driver: bridge
